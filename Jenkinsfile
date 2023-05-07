@@ -1,16 +1,18 @@
 #!/usr/bin/env groovy
-
+def gv
 pipeline {
     agent any
     tools {
         maven 'maven-3.6'
     }
     stages {
+        stage('init'){
+            gv = load "script.groovy"
+        }
         stage('build jar') {
             steps {
                 script {
-                    echo "Building the application..."
-                    sh 'mvn package'
+                    gv.buildApp()
                 }
             }
         }
@@ -29,8 +31,7 @@ pipeline {
         stage('deploy') {
             steps {
                 script {
-                    echo "Deploying the application..."
-                }
+                    gv.deployApp()                }
             }
         }
     }
